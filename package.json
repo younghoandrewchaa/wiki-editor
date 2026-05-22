@@ -40,6 +40,7 @@
     "class-variance-authority": "^0.7.1",
     "electron": "42.0.0",
     "eslint": "^8.57.1",
+    "eslint-import-resolver-typescript": "^3.10.1",
     "eslint-plugin-import": "^2.32.0",
     "sass": "^1.100.0",
     "sass-embedded": "^1.100.0",
