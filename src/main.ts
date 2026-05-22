@@ -1,4 +1,5 @@
-import { app, BrowserWindow, session } from 'electron';
+import { app, BrowserWindow, ipcMain, session } from 'electron';
+import fs from 'node:fs';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
@@ -6,6 +7,24 @@ import started from 'electron-squirrel-startup';
 if (started) {
   app.quit();
 }
+
+let pendingFilePath: string | null = null;
+
+// Must be registered before 'ready' to catch files opened at launch on macOS.
+app.on('open-file', (event, filePath) => {
+  event.preventDefault();
+  const win = BrowserWindow.getAllWindows()[0];
+  if (win) {
+    win.webContents.send('file-opened', filePath);
+  } else {
+    pendingFilePath = filePath;
+  }
+});
+
+ipcMain.handle('read-file', async (_, filePath: string) => {
+  const content = await fs.promises.readFile(filePath, 'utf-8');
+  return { path: filePath, content };
+});
 
 const createWindow = () => {
   // Create the browser window.
@@ -15,6 +34,13 @@ const createWindow = () => {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
+  });
+
+  mainWindow.webContents.once('did-finish-load', () => {
+    if (pendingFilePath) {
+      mainWindow.webContents.send('file-opened', pendingFilePath);
+      pendingFilePath = null;
+    }
   });
 
   // and load the index.html of the app.

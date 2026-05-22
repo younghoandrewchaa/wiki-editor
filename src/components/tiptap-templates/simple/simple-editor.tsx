@@ -13,6 +13,7 @@ import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
 import { Selection } from "@tiptap/extensions"
+import { Markdown } from "@tiptap/markdown"
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button"
@@ -227,6 +228,7 @@ export function SimpleEditor() {
         upload: handleImageUpload,
         onError: (error) => console.error("Upload failed:", error),
       }),
+      Markdown,
     ],
     content,
   })
@@ -241,6 +243,14 @@ export function SimpleEditor() {
       setMobileView("main")
     }
   }, [isMobile, mobileView])
+
+  useEffect(() => {
+    if (!editor || !window.electronAPI) return
+    window.electronAPI.onFileOpened(async (filePath) => {
+      const { content: markdownContent } = await window.electronAPI.readFile(filePath)
+      editor.commands.setContent(markdownContent)
+    })
+  }, [editor])
 
   return (
     <div className="simple-editor-wrapper">
