@@ -1,11 +1,7 @@
-import Tiptap from './Tiptap';
+import { SimpleEditor } from '@/components/tiptap-templates/simple/simple-editor';
 
 function App() {
-  return (
-    <div className="app">
-      <Tiptap />
-    </div>
-  );
+  return <SimpleEditor />;
 }
 
 export default App;
