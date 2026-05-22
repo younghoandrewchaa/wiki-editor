@@ -5,7 +5,9 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 contextBridge.exposeInMainWorld('electronAPI', {
   onFileOpened: (callback: (filePath: string) => void) => {
-    ipcRenderer.on('file-opened', (_event, filePath: string) => callback(filePath));
+    const listener = (_event: Electron.IpcRendererEvent, filePath: string) => callback(filePath);
+    ipcRenderer.on('file-opened', listener);
+    return () => ipcRenderer.removeListener('file-opened', listener);
   },
   readFile: (filePath: string): Promise<{ path: string; content: string }> => {
     return ipcRenderer.invoke('read-file', filePath);

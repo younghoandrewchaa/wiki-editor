@@ -75,7 +75,6 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
 
-import content from "@/components/tiptap-templates/simple/data/content.json"
 
 const MainToolbarContent = ({
   onHighlighterClick,
@@ -233,7 +232,7 @@ export function SimpleEditor() {
       }),
       Markdown,
     ],
-    content,
+    content: "",
   })
 
   const rect = useCursorVisibility({
@@ -249,10 +248,12 @@ export function SimpleEditor() {
 
   useEffect(() => {
     if (!editor || !window.electronAPI) return
-    window.electronAPI.onFileOpened(async (filePath) => {
+    const unsubscribe = window.electronAPI.onFileOpened(async (filePath) => {
       const { content: markdownContent } = await window.electronAPI.readFile(filePath)
       editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
+      document.title = filePath.split('/').pop() ?? filePath
     })
+    return unsubscribe
   }, [editor])
 
   return (

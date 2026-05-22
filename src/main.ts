@@ -8,16 +8,16 @@ if (started) {
   app.quit();
 }
 
-let pendingFilePath: string | null = null;
+const pendingFilePaths: string[] = [];
+let appReady = false;
 
 // Must be registered before 'ready' to catch files opened at launch on macOS.
 app.on('open-file', (event, filePath) => {
   event.preventDefault();
-  const win = BrowserWindow.getAllWindows()[0];
-  if (win) {
-    win.webContents.send('file-opened', filePath);
+  if (appReady) {
+    createWindow(filePath);
   } else {
-    pendingFilePath = filePath;
+    pendingFilePaths.push(filePath);
   }
 });
 
@@ -26,8 +26,7 @@ ipcMain.handle('read-file', async (_, filePath: string) => {
   return { path: filePath, content };
 });
 
-const createWindow = () => {
-  // Create the browser window.
+const createWindow = (filePath?: string) => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -36,12 +35,11 @@ const createWindow = () => {
     },
   });
 
-  mainWindow.webContents.once('did-finish-load', () => {
-    if (pendingFilePath) {
-      mainWindow.webContents.send('file-opened', pendingFilePath);
-      pendingFilePath = null;
-    }
-  });
+  if (filePath) {
+    mainWindow.webContents.once('did-finish-load', () => {
+      mainWindow.webContents.send('file-opened', filePath);
+    });
+  }
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -66,12 +64,14 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  // Pick up a file path passed as a CLI argument (dev workflow only).
+  appReady = true;
+
+  // Pick up file paths passed as CLI arguments (dev workflow only).
   // The open-file event is not emitted for argv — only for Apple Events from
   // a packaged, OS-registered app.
-  if (!pendingFilePath) {
-    const argFilePath = process.argv.find((arg) => /\.(md|markdown)$/i.test(arg));
-    if (argFilePath) pendingFilePath = argFilePath;
+  const argFilePaths = process.argv.filter((arg) => /\.(md|markdown)$/i.test(arg));
+  for (const p of argFilePaths) {
+    if (!pendingFilePaths.includes(p)) pendingFilePaths.push(p);
   }
 
   // Set CSP for the renderer. In dev, Vite HMR requires unsafe-eval and
@@ -93,7 +93,13 @@ app.on('ready', () => {
     });
   }
 
-  createWindow();
+  if (pendingFilePaths.length > 0) {
+    for (const p of pendingFilePaths.splice(0)) {
+      createWindow(p);
+    }
+  } else {
+    createWindow();
+  }
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
