@@ -1,6 +1,6 @@
 {
-  "name": "wiki-view",
-  "productName": "wiki-view",
+  "name": "m-note",
+  "productName": "M Note",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
