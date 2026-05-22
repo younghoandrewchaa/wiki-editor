@@ -248,7 +248,7 @@ export function SimpleEditor() {
     if (!editor || !window.electronAPI) return
     window.electronAPI.onFileOpened(async (filePath) => {
       const { content: markdownContent } = await window.electronAPI.readFile(filePath)
-      editor.commands.setContent(markdownContent)
+      editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
     })
   }, [editor])
 

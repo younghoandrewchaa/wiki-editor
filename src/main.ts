@@ -66,6 +66,14 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  // Pick up a file path passed as a CLI argument (dev workflow only).
+  // The open-file event is not emitted for argv — only for Apple Events from
+  // a packaged, OS-registered app.
+  if (!pendingFilePath) {
+    const argFilePath = process.argv.find((arg) => /\.(md|markdown)$/i.test(arg));
+    if (argFilePath) pendingFilePath = argFilePath;
+  }
+
   // Set CSP for the renderer. In dev, Vite HMR requires unsafe-eval and
   // a WebSocket connection back to the dev server.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
