@@ -14,6 +14,9 @@ if [ ! -f resources/icon.icns ]; then
   sh scripts/generate-icon.sh
 fi
 
+# --- Clean previous build ---
+rm -rf out/
+
 # --- Build DMG ---
 echo "==> Building DMG for v${VERSION}..."
 npm run make -- --targets @electron-forge/maker-dmg
