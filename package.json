@@ -13,7 +13,8 @@
     "lint": "eslint --ext .ts,.tsx .",
     "icon": "sh scripts/generate-icon.sh",
     "package:mac": "sh scripts/package-mac.sh",
-    "release": "sh scripts/release.sh"
+    "release": "sh scripts/release.sh",
+    "build:dmg": "sh scripts/build-dmg.sh"
   },
   "keywords": [],
   "author": {
@@ -25,6 +26,7 @@
     "@base-ui/react": "^1.5.0",
     "@electron-forge/cli": "^7.11.1",
     "@electron-forge/maker-deb": "^7.11.1",
+    "@electron-forge/maker-dmg": "^7.11.2",
     "@electron-forge/maker-rpm": "^7.11.1",
     "@electron-forge/maker-squirrel": "^7.11.1",
     "@electron-forge/maker-zip": "^7.11.1",

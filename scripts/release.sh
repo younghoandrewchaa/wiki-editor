@@ -1,21 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'echo "Error: script failed at line $LINENO" >&2' ERR
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-ROOT_DIR="$(dirname "$SCRIPT_DIR")"
-cd "$ROOT_DIR"
+ROOT="$SCRIPT_DIR/.."
+cd "$ROOT"
 
-# --- Require GITHUB_TOKEN (fall back to gh CLI) ---
-if [ -z "${GITHUB_TOKEN:-}" ]; then
-  if command -v gh &>/dev/null; then
-    GITHUB_TOKEN="$(gh auth token 2>/dev/null)"
-  fi
-fi
-if [ -z "${GITHUB_TOKEN:-}" ]; then
-  echo "Error: no GitHub token found. Run 'gh auth login' or set GITHUB_TOKEN."
+APP_NAME="M Note"
+
+# --- Require gh CLI ---
+if ! command -v gh &>/dev/null; then
+  echo "Error: gh CLI is required. Install it: brew install gh"
   exit 1
 fi
-export GITHUB_TOKEN
 
 # --- Require clean working tree ---
 if ! git diff --quiet || ! git diff --cached --quiet; then
@@ -25,20 +22,37 @@ fi
 
 # --- Bump patch version ---
 NEW_VERSION=$(npm version patch --no-git-tag-version | sed 's/^v//')
-echo "Version bumped to $NEW_VERSION"
+echo "==> Version bumped to $NEW_VERSION"
 
 # --- Commit and tag ---
 git add package.json package-lock.json
 git commit -m "v${NEW_VERSION}"
 git tag "v${NEW_VERSION}"
-echo "Created commit and tag v${NEW_VERSION}"
+echo "==> Created commit and tag v${NEW_VERSION}"
 
-# --- Build and publish ---
-echo "Building and publishing..."
-npm run publish
+# --- Build DMG ---
+sh "$SCRIPT_DIR/build-dmg.sh"
+
+# --- Find DMG ---
+DMG_PATH=$(find out/make -name "*.dmg" -maxdepth 3 | head -1)
+if [ -z "$DMG_PATH" ]; then
+  echo "Error: DMG not found in out/make/"
+  exit 1
+fi
 
 # --- Push commit and tag ---
+echo "==> Pushing to remote..."
 git push
 git push --tags
+
+# --- Publish to GitHub ---
+TAG="v${NEW_VERSION}"
+echo "==> Creating GitHub release $TAG..."
+gh release create "$TAG" "$DMG_PATH" \
+  --title "$APP_NAME $TAG" \
+  --generate-notes
+
 echo ""
-echo "Released v${NEW_VERSION} — check GitHub for the draft release."
+echo "Released $APP_NAME $TAG"
+echo "  DMG: $DMG_PATH"
+echo "  Release: $(gh release view "$TAG" --json url -q .url)"
