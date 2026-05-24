@@ -13,6 +13,10 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
     icon: './resources/icon',
+    osxSign: {},
+    osxNotarize: {
+      keychainProfile: 'sprout-pomodoro',
+    },
     extendInfo: {
       CFBundleDocumentTypes: [
         {
