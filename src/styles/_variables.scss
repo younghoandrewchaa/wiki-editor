@@ -1,5 +1,5 @@
 :root {
-  /****************** 
+  /******************
   Basics
   ******************/
 
@@ -9,70 +9,70 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /****************** 
+  /******************
   Colors variables
   ******************/
 
-  /* Gray alpha (light mode) */
-  --tt-gray-light-a-50: rgba(56, 56, 56, 0.04);
-  --tt-gray-light-a-100: rgba(15, 22, 36, 0.05);
-  --tt-gray-light-a-200: rgba(37, 39, 45, 0.1);
-  --tt-gray-light-a-300: rgba(47, 50, 55, 0.2);
-  --tt-gray-light-a-400: rgba(40, 44, 51, 0.42);
-  --tt-gray-light-a-500: rgba(52, 55, 60, 0.64);
-  --tt-gray-light-a-600: rgba(36, 39, 46, 0.78);
-  --tt-gray-light-a-700: rgba(35, 37, 42, 0.87);
-  --tt-gray-light-a-800: rgba(30, 32, 36, 0.95);
-  --tt-gray-light-a-900: rgba(29, 30, 32, 0.98);
+  /* Gray alpha (light mode) — warm base */
+  --tt-gray-light-a-50: rgba(20, 20, 19, 0.04);
+  --tt-gray-light-a-100: rgba(20, 20, 19, 0.06);
+  --tt-gray-light-a-200: rgba(20, 20, 19, 0.10);
+  --tt-gray-light-a-300: rgba(20, 20, 19, 0.18);
+  --tt-gray-light-a-400: rgba(20, 20, 19, 0.38);
+  --tt-gray-light-a-500: rgba(20, 20, 19, 0.56);
+  --tt-gray-light-a-600: rgba(20, 20, 19, 0.72);
+  --tt-gray-light-a-700: rgba(20, 20, 19, 0.84);
+  --tt-gray-light-a-800: rgba(20, 20, 19, 0.93);
+  --tt-gray-light-a-900: rgba(20, 20, 19, 0.97);
 
-  /* Gray (light mode) */
-  --tt-gray-light-50: rgba(250, 250, 250, 1);
-  --tt-gray-light-100: rgba(244, 244, 245, 1);
-  --tt-gray-light-200: rgba(234, 234, 235, 1);
-  --tt-gray-light-300: rgba(213, 214, 215, 1);
-  --tt-gray-light-400: rgba(166, 167, 171, 1);
-  --tt-gray-light-500: rgba(125, 127, 130, 1);
-  --tt-gray-light-600: rgba(83, 86, 90, 1);
-  --tt-gray-light-700: rgba(64, 65, 69, 1);
-  --tt-gray-light-800: rgba(44, 45, 48, 1);
-  --tt-gray-light-900: rgba(34, 35, 37, 1);
+  /* Gray (light mode) — warm cream scale */
+  --tt-gray-light-50: #faf9f5;
+  --tt-gray-light-100: #f5f0e8;
+  --tt-gray-light-200: #efe9de;
+  --tt-gray-light-300: #e8e0d2;
+  --tt-gray-light-400: #8e8b82;
+  --tt-gray-light-500: #6c6a64;
+  --tt-gray-light-600: #3d3d3a;
+  --tt-gray-light-700: #252523;
+  --tt-gray-light-800: #1f1e1b;
+  --tt-gray-light-900: #141413;
 
-  /* Gray alpha (dark mode) */
-  --tt-gray-dark-a-50: rgba(232, 232, 253, 0.05);
-  --tt-gray-dark-a-100: rgba(231, 231, 243, 0.07);
-  --tt-gray-dark-a-200: rgba(238, 238, 246, 0.11);
-  --tt-gray-dark-a-300: rgba(239, 239, 245, 0.22);
-  --tt-gray-dark-a-400: rgba(244, 244, 255, 0.37);
-  --tt-gray-dark-a-500: rgba(236, 238, 253, 0.5);
-  --tt-gray-dark-a-600: rgba(247, 247, 253, 0.64);
-  --tt-gray-dark-a-700: rgba(251, 251, 254, 0.75);
-  --tt-gray-dark-a-800: rgba(253, 253, 253, 0.88);
-  --tt-gray-dark-a-900: rgba(255, 255, 255, 0.96);
+  /* Gray alpha (dark mode) — warm base */
+  --tt-gray-dark-a-50: rgba(250, 249, 245, 0.05);
+  --tt-gray-dark-a-100: rgba(250, 249, 245, 0.07);
+  --tt-gray-dark-a-200: rgba(250, 249, 245, 0.11);
+  --tt-gray-dark-a-300: rgba(250, 249, 245, 0.20);
+  --tt-gray-dark-a-400: rgba(250, 249, 245, 0.35);
+  --tt-gray-dark-a-500: rgba(250, 249, 245, 0.48);
+  --tt-gray-dark-a-600: rgba(250, 249, 245, 0.62);
+  --tt-gray-dark-a-700: rgba(250, 249, 245, 0.74);
+  --tt-gray-dark-a-800: rgba(250, 249, 245, 0.87);
+  --tt-gray-dark-a-900: rgba(250, 249, 245, 0.95);
 
-  /* Gray (dark mode) */
-  --tt-gray-dark-50: rgba(25, 25, 26, 1);
-  --tt-gray-dark-100: rgba(32, 32, 34, 1);
-  --tt-gray-dark-200: rgba(45, 45, 47, 1);
-  --tt-gray-dark-300: rgba(70, 70, 73, 1);
-  --tt-gray-dark-400: rgba(99, 99, 105, 1);
-  --tt-gray-dark-500: rgba(124, 124, 131, 1);
-  --tt-gray-dark-600: rgba(163, 163, 168, 1);
-  --tt-gray-dark-700: rgba(192, 192, 195, 1);
-  --tt-gray-dark-800: rgba(224, 224, 225, 1);
-  --tt-gray-dark-900: rgba(245, 245, 245, 1);
+  /* Gray (dark mode) — warm dark scale */
+  --tt-gray-dark-50: #181715;
+  --tt-gray-dark-100: #1f1e1b;
+  --tt-gray-dark-200: #252320;
+  --tt-gray-dark-300: #3d3b36;
+  --tt-gray-dark-400: #5a5750;
+  --tt-gray-dark-500: #6c6a64;
+  --tt-gray-dark-600: #8e8b82;
+  --tt-gray-dark-700: #a09d96;
+  --tt-gray-dark-800: #e8e0d2;
+  --tt-gray-dark-900: #faf9f5;
 
-  /* Brand colors */
-  --tt-brand-color-50: rgba(239, 238, 255, 1);
-  --tt-brand-color-100: rgba(222, 219, 255, 1);
-  --tt-brand-color-200: rgba(195, 189, 255, 1);
-  --tt-brand-color-300: rgba(157, 138, 255, 1);
-  --tt-brand-color-400: rgba(122, 82, 255, 1);
-  --tt-brand-color-500: rgba(98, 41, 255, 1);
-  --tt-brand-color-600: rgba(84, 0, 229, 1);
-  --tt-brand-color-700: rgba(75, 0, 204, 1);
-  --tt-brand-color-800: rgba(56, 0, 153, 1);
-  --tt-brand-color-900: rgba(43, 25, 102, 1);
-  --tt-brand-color-950: hsla(257, 100%, 9%, 1);
+  /* Brand colors — warm coral */
+  --tt-brand-color-50: #fdf4f0;
+  --tt-brand-color-100: #f8e4da;
+  --tt-brand-color-200: #f0cbb8;
+  --tt-brand-color-300: #e4a98e;
+  --tt-brand-color-400: #d9916f;
+  --tt-brand-color-500: #cc785c;
+  --tt-brand-color-600: #a9583e;
+  --tt-brand-color-700: #8f4a33;
+  --tt-brand-color-800: #6e3826;
+  --tt-brand-color-900: #4d2819;
+  --tt-brand-color-950: #331a10;
 
   /* Green */
   --tt-color-green-inc-5: hsla(129, 100%, 97%, 1);
@@ -113,24 +113,24 @@
   --tt-color-red-dec-4: hsla(3, 100%, 16%, 1);
   --tt-color-red-dec-5: hsla(1, 100%, 9%, 1);
 
-  /* Basic colors */
-  --white: rgba(255, 255, 255, 1);
-  --black: rgba(14, 14, 17, 1);
-  --transparent: rgba(255, 255, 255, 0);
+  /* Basic colors — warm canvas & ink */
+  --white: #faf9f5;
+  --black: #141413;
+  --transparent: rgba(250, 249, 245, 0);
 
-  /****************** 
+  /******************
   Shadow variables
   ******************/
 
-  /* Shadows Light */
+  /* Shadows Light — warm base */
   --tt-shadow-elevated-md:
-    0px 16px 48px 0px rgba(17, 24, 39, 0.04),
-    0px 12px 24px 0px rgba(17, 24, 39, 0.04),
-    0px 6px 8px 0px rgba(17, 24, 39, 0.02),
-    0px 2px 3px 0px rgba(17, 24, 39, 0.02);
+    0px 16px 48px 0px rgba(20, 20, 19, 0.04),
+    0px 12px 24px 0px rgba(20, 20, 19, 0.04),
+    0px 6px 8px 0px rgba(20, 20, 19, 0.02),
+    0px 2px 3px 0px rgba(20, 20, 19, 0.02);
 
-  /************************************************** 
-       Radius variables 
+  /**************************************************
+       Radius variables
     **************************************************/
 
   --tt-radius-xxs: 0.125rem; /* 2px */
@@ -140,8 +140,8 @@
   --tt-radius-lg: 0.75rem; /* 12px */
   --tt-radius-xl: 1rem; /* 16px */
 
-  /************************************************** 
-       Transition variables 
+  /**************************************************
+       Transition variables
     **************************************************/
 
   --tt-transition-duration-short: 0.1s;
@@ -153,7 +153,7 @@
   --tt-transition-easing-circ: cubic-bezier(0.79, 0.14, 0.15, 0.86);
   --tt-transition-easing-back: cubic-bezier(0.68, -0.55, 0.27, 1.55);
 
-  /****************** 
+  /******************
   Contrast variables
   ******************/
 
@@ -172,8 +172,8 @@
 }
 
 :root {
-  /************************************************** 
-      Global colors 
+  /**************************************************
+      Global colors
   **************************************************/
 
   /* Global colors - Light mode */
@@ -183,7 +183,7 @@
   --tt-sidebar-bg-color: var(--tt-gray-light-100);
   --tt-scrollbar-color: var(--tt-gray-light-a-200);
   --tt-cursor-color: var(--tt-brand-color-500);
-  --tt-selection-color: rgba(157, 138, 255, 0.2);
+  --tt-selection-color: rgba(204, 120, 92, 0.2);
   --tt-card-bg-color: var(--white);
   --tt-card-border-color: var(--tt-gray-light-a-100);
 }
@@ -196,7 +196,7 @@
   --tt-sidebar-bg-color: var(--tt-gray-dark-100);
   --tt-scrollbar-color: var(--tt-gray-dark-a-200);
   --tt-cursor-color: var(--tt-brand-color-400);
-  --tt-selection-color: rgba(122, 82, 255, 0.2);
+  --tt-selection-color: rgba(204, 120, 92, 0.18);
   --tt-card-bg-color: var(--tt-gray-dark-50);
   --tt-card-border-color: var(--tt-gray-dark-a-50);
 
@@ -257,7 +257,7 @@
   --tt-color-highlight-blue: #e0f2fe;
   --tt-color-highlight-purple: #f3e8ff;
   --tt-color-highlight-red: #ffe4e6;
-  --tt-color-highlight-gray: rgb(248, 248, 247);
+  --tt-color-highlight-gray: #f5f0e8;
   --tt-color-highlight-brown: rgb(244, 238, 238);
   --tt-color-highlight-orange: rgb(251, 236, 221);
   --tt-color-highlight-pink: rgb(252, 241, 246);
@@ -279,7 +279,7 @@
   --tt-color-highlight-blue: #6e92aa;
   --tt-color-highlight-purple: #583e74;
   --tt-color-highlight-red: #743e42;
-  --tt-color-highlight-gray: rgb(47, 47, 47);
+  --tt-color-highlight-gray: rgb(50, 48, 44);
   --tt-color-highlight-brown: rgb(74, 50, 40);
   --tt-color-highlight-orange: rgb(92, 59, 35);
   --tt-color-highlight-pink: rgb(78, 44, 60);

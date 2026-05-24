@@ -256,6 +256,40 @@ export function SimpleEditor() {
     return unsubscribe
   }, [editor])
 
+  useEffect(() => {
+    if (!editor) return
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault()
+    }
+
+    const handleDrop = (e: DragEvent) => {
+      e.preventDefault()
+      const files = e.dataTransfer?.files
+      if (!files?.length) return
+
+      const file = Array.from(files).find((f) =>
+        /\.(md|markdown)$/i.test(f.name),
+      )
+      if (!file) return
+
+      const reader = new FileReader()
+      reader.onload = () => {
+        const markdownContent = reader.result as string
+        editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
+        document.title = file.name
+      }
+      reader.readAsText(file)
+    }
+
+    document.addEventListener('dragover', handleDragOver)
+    document.addEventListener('drop', handleDrop)
+    return () => {
+      document.removeEventListener('dragover', handleDragOver)
+      document.removeEventListener('drop', handleDrop)
+    }
+  }, [editor])
+
   return (
     <div className="simple-editor-wrapper">
       <EditorContext.Provider value={{ editor }}>
