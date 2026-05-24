@@ -27,9 +27,12 @@ ipcMain.handle('read-file', async (_, filePath: string) => {
 });
 
 const createWindow = (filePath?: string) => {
+  const { width: screenWidth, height: screenHeight } =
+    require('electron').screen.getPrimaryDisplay().workAreaSize;
+
   const mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: Math.round(screenWidth / 2),
+    height: screenHeight,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
