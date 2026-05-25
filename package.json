@@ -1,12 +1,14 @@
 {
   "name": "m-note",
   "productName": "M Note",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
     "start": "electron-forge start",
+    "version:bump": "npm version patch --no-git-tag-version",
+    "version:commit": "git add package.json package-lock.json && git commit -m \"v$(node -p \"require('./package.json').version\")\" && git tag \"v$(node -p \"require('./package.json').version\")\"",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
