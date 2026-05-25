@@ -13,6 +13,10 @@ if [ -z "$DMG_PATH" ]; then
   exit 1
 fi
 
+echo "==> Pushing tag $TAG..."
+git push
+git push --tags
+
 echo "==> Creating GitHub release $TAG..."
 gh release create "$TAG" "$DMG_PATH" \
   --title "M Note $TAG" \
