@@ -19,7 +19,7 @@ rm -rf out/
 
 # --- Build DMG ---
 echo "==> Building DMG for v${VERSION}..."
-npm run make -- --targets @electron-forge/maker-dmg
+npx electron-forge make --targets @electron-forge/maker-dmg
 
 # --- Find DMG ---
 DMG_PATH=$(find out/make -name "*.dmg" -maxdepth 3 | head -1)

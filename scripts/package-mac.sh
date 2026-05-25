@@ -13,7 +13,7 @@ fi
 
 # --- Build ---
 echo "Building and packaging..."
-npm run make
+npx electron-forge make
 
 # --- Find artifacts ---
 APP_PATH=$(find out -name "*.app" -maxdepth 4 | head -1)

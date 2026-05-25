@@ -10,13 +10,9 @@
     "version:bump": "npm version patch --no-git-tag-version",
     "version:commit": "git add package.json package-lock.json && git commit -m \"v$(node -p \"require('./package.json').version\")\" && git tag \"v$(node -p \"require('./package.json').version\")\"",
     "build:dmg": "sh scripts/build-dmg.sh",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
+    "release:github": "gh release create \"v$(node -p \"require('./package.json').version\")\" $(find out/make -name '*.dmg' -maxdepth 3 | head -1) --title \"M Note v$(node -p \"require('./package.json').version\")\" --generate-notes",
     "lint": "eslint --ext .ts,.tsx .",
-    "icon": "sh scripts/generate-icon.sh",
-    "package:mac": "sh scripts/package-mac.sh",
-    "release": "sh scripts/release.sh"
+    "icon": "sh scripts/generate-icon.sh"
   },
   "keywords": [],
   "author": {
