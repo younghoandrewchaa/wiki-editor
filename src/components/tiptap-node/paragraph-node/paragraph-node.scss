@@ -19,7 +19,7 @@
   }
 }
 
-/* Ensure each top-level node has relative positioning 
+/* Ensure each top-level node has relative positioning
    so absolutely positioned placeholders work correctly */
 .tiptap.ProseMirror > * {
   position: relative;
@@ -221,8 +221,8 @@
 
   // React renderer specific styles
   .tiptap-thread.tiptap-thread--block:has(.react-renderer) {
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 }
 
