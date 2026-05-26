@@ -168,7 +168,7 @@ export function useLinkHandler(props: LinkHandlerProps) {
   }, [editor])
 
   const openLink = useCallback(
-    (target: string = "_blank", features: string = "noopener,noreferrer") => {
+    (target = "_blank", features = "noopener,noreferrer") => {
       if (!url) return
 
       const safeUrl = sanitizeUrl(url, window.location.href)

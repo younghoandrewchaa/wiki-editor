@@ -1,5 +1,4 @@
-import { app } from 'electron';
-import { net } from 'electron';
+import { app , net } from 'electron';
 
 const REPO = 'younghoandrewchaa/m-note';
 

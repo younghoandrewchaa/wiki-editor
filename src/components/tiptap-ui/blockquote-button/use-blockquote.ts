@@ -46,7 +46,7 @@ export interface UseBlockquoteConfig {
  */
 export function canToggleBlockquote(
   editor: Editor | null,
-  turnInto: boolean = true
+  turnInto = true
 ): boolean {
   if (!editor || !editor.isEditable) return false
   if (

@@ -34,7 +34,6 @@ export function useThrottledCallback<T extends (...args: any[]) => any>(
 } {
   const handler = useMemo(
     () => throttle<T>(fn, wait, options),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     dependencies
   )
 

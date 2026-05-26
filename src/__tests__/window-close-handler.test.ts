@@ -11,9 +11,9 @@ vi.mock('electron', () => ({
 import { attachCloseHandler } from '../window-close-handler';
 
 function createMockWindow() {
-  const listeners: Record<string, Function[]> = {};
+  const listeners: Record<string, ((...args: unknown[]) => void)[]> = {};
   return {
-    on(event: string, fn: Function) {
+    on(event: string, fn: (...args: unknown[]) => void) {
       (listeners[event] ??= []).push(fn);
     },
     close: vi.fn(function (this: any) {
@@ -70,7 +70,7 @@ describe('attachCloseHandler', () => {
   it('saves and closes when user picks "Save"', async () => {
     win.webContents.executeJavaScript.mockResolvedValue(true);
     mockShowMessageBoxSync.mockReturnValue(0); // Save
-    mockIpcMainOnce.mockImplementation((_channel: string, cb: Function) => cb());
+    mockIpcMainOnce.mockImplementation((_channel: string, cb: () => void) => cb());
 
     win._fireClose();
     await vi.waitFor(() => expect(win.webContents.send).toHaveBeenCalledWith('save-before-close'));

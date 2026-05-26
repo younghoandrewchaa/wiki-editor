@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, screen, session, shell } from 'electron';
 import fs from 'node:fs';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
@@ -38,7 +38,7 @@ ipcMain.handle('open-external', (_, url: string) => shell.openExternal(url));
 
 const createWindow = (filePath?: string) => {
   const { width: screenWidth, height: screenHeight } =
-    require('electron').screen.getPrimaryDisplay().workAreaSize;
+    screen.getPrimaryDisplay().workAreaSize;
 
   const mainWindow = new BrowserWindow({
     width: Math.round(screenWidth / 2),

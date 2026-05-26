@@ -70,7 +70,7 @@ export function isMac(): boolean {
 export const formatShortcutKey = (
   key: string,
   isMac: boolean,
-  capitalize: boolean = true
+  capitalize = true
 ) => {
   if (isMac) {
     const lowerKey = key.toLowerCase()
@@ -287,7 +287,7 @@ export function findNodePosition(props: {
 export function isNodeTypeSelected(
   editor: Editor | null,
   nodeTypeNames: string[] = [],
-  checkAncestorNodes: boolean = false
+  checkAncestorNodes = false
 ): boolean {
   if (!editor || !editor.state.selection) return false
 
