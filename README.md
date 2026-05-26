@@ -2,6 +2,8 @@
 
 A markdown editor built with Electron, React, and Tiptap.
 
+![M Note](m-note-screenshot.png)
+
 ## Development
 
 ```bash
@@ -35,10 +37,3 @@ npm run build:dmg
 
 Builds the DMG without bumping the version or publishing. Useful for local testing.
 
-### Package
-
-```bash
-npm run package:mac
-```
-
-Builds and packages the app as a `.app` bundle, with an option to install to `~/Applications`.
