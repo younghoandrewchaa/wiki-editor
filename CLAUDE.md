@@ -15,6 +15,10 @@ M Note is a macOS desktop markdown editor built with Electron, React, and Tiptap
 - `npm run build:dmg` — build macOS DMG (calls `scripts/build-dmg.sh`)
 - `npm run release` — full release pipeline: version bump, commit, tag, build DMG, push, GitHub release via `gh`
 
+## Rules
+
+- When fixing a bug or issue, always write a unit test that reproduces the problem before implementing the fix. Tests go in `src/__tests__/`.
+
 ## Architecture
 
 **Electron process split:**

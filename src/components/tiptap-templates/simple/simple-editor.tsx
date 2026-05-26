@@ -14,6 +14,7 @@ import { Highlight } from "@tiptap/extension-highlight"
 import { Subscript } from "@tiptap/extension-subscript"
 import { Superscript } from "@tiptap/extension-superscript"
 import { Selection } from "@tiptap/extensions"
+import { Table, TableRow, TableCell, TableHeader } from "@tiptap/extension-table"
 import { Markdown } from "@tiptap/markdown"
 
 // --- UI Primitives ---
@@ -36,6 +37,7 @@ import "@/components/tiptap-node/list-node/list-node.scss"
 import "@/components/tiptap-node/image-node/image-node.scss"
 import "@/components/tiptap-node/heading-node/heading-node.scss"
 import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
+import "@/components/tiptap-node/table-node/table-node.scss"
 
 // --- Tiptap UI ---
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
@@ -243,6 +245,10 @@ export function SimpleEditor() {
       Superscript,
       Subscript,
       Selection,
+      Table,
+      TableRow,
+      TableCell,
+      TableHeader,
       ImageUploadNode.configure({
         accept: "image/*",
         maxSize: MAX_FILE_SIZE,

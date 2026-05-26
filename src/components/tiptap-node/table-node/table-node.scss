@@ -1,0 +1,43 @@
+.tiptap.ProseMirror {
+  --tt-table-border-color: var(--tt-gray-light-a-200);
+  --tt-table-header-bg: var(--tt-gray-light-a-100);
+
+  .dark & {
+    --tt-table-border-color: var(--tt-gray-dark-a-200);
+    --tt-table-header-bg: var(--tt-gray-dark-a-100);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    overflow: auto;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  th,
+  td {
+    border: 1px solid var(--tt-table-border-color);
+    padding: 0.5em 0.75em;
+    text-align: left;
+    vertical-align: top;
+    min-width: 80px;
+
+    > p {
+      margin: 0;
+    }
+  }
+
+  th {
+    background-color: var(--tt-table-header-bg);
+    font-weight: 600;
+  }
+}
