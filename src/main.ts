@@ -1,7 +1,8 @@
-import { app, BrowserWindow, ipcMain, session } from 'electron';
+import { app, BrowserWindow, ipcMain, session, shell } from 'electron';
 import fs from 'node:fs';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
+import { checkForUpdate } from './update-checker';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -25,6 +26,10 @@ ipcMain.handle('read-file', async (_, filePath: string) => {
   const content = await fs.promises.readFile(filePath, 'utf-8');
   return { path: filePath, content };
 });
+
+ipcMain.handle('check-for-update', () => checkForUpdate());
+
+ipcMain.handle('open-external', (_, url: string) => shell.openExternal(url));
 
 const createWindow = (filePath?: string) => {
   const { width: screenWidth, height: screenHeight } =

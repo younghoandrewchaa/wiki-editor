@@ -191,6 +191,7 @@ export function SimpleEditor() {
     "main"
   )
   const toolbarRef = useRef<HTMLDivElement>(null)
+  const [updateInfo, setUpdateInfo] = useState<{ version: string; downloadUrl: string } | null>(null)
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -247,11 +248,21 @@ export function SimpleEditor() {
   }, [isMobile, mobileView])
 
   useEffect(() => {
+    if (!window.electronAPI) return
+    window.electronAPI.checkForUpdate().then((info) => {
+      if (info) setUpdateInfo(info)
+    })
+  }, [])
+
+  useEffect(() => {
     if (!editor || !window.electronAPI) return
     const unsubscribe = window.electronAPI.onFileOpened(async (filePath) => {
       const { content: markdownContent } = await window.electronAPI.readFile(filePath)
       editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
       document.title = filePath.split('/').pop() ?? filePath
+      window.electronAPI.checkForUpdate().then((info) => {
+        if (info) setUpdateInfo(info)
+      })
     })
     return unsubscribe
   }, [editor])
@@ -292,6 +303,24 @@ export function SimpleEditor() {
 
   return (
     <div className="simple-editor-wrapper">
+      {updateInfo && (
+        <div className="update-banner">
+          <span>M Note v{updateInfo.version} is available.</span>
+          <button
+            className="update-banner-link"
+            onClick={() => window.electronAPI?.openExternal(updateInfo.downloadUrl)}
+          >
+            Download
+          </button>
+          <button
+            className="update-banner-dismiss"
+            onClick={() => setUpdateInfo(null)}
+            aria-label="Dismiss"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <EditorContext.Provider value={{ editor }}>
         <Toolbar
           ref={toolbarRef}

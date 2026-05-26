@@ -12,4 +12,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   readFile: (filePath: string): Promise<{ path: string; content: string }> => {
     return ipcRenderer.invoke('read-file', filePath);
   },
+  checkForUpdate: (): Promise<{ version: string; downloadUrl: string } | null> => {
+    return ipcRenderer.invoke('check-for-update');
+  },
+  openExternal: (url: string): Promise<void> => {
+    return ipcRenderer.invoke('open-external', url);
+  },
 });
