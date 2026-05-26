@@ -30,7 +30,10 @@ import {
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension"
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension"
 import { CodeBlock } from "@/components/tiptap-node/code-block-node/code-block-node-extension"
+import { Frontmatter } from "@/components/tiptap-node/frontmatter-node/frontmatter-node-extension"
+import { extractFrontmatter } from "@/lib/frontmatter"
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss"
+import "@/components/tiptap-node/frontmatter-node/frontmatter-node.scss"
 import "@/components/tiptap-node/code-block-node/code-block-node.scss"
 import "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node.scss"
 import "@/components/tiptap-node/list-node/list-node.scss"
@@ -235,6 +238,7 @@ export function SimpleEditor() {
         },
       }),
       CodeBlock,
+      Frontmatter,
       HorizontalRule,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       TaskList,
@@ -331,7 +335,14 @@ export function SimpleEditor() {
     if (!editor || !window.electronAPI) return
     const unsubscribe = window.electronAPI.onFileOpened(async (filePath) => {
       const { content: markdownContent } = await window.electronAPI.readFile(filePath)
-      editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
+      const { frontmatter, body } = extractFrontmatter(markdownContent)
+      editor.commands.setContent(body, { emitUpdate: false, contentType: 'markdown' })
+      if (frontmatter !== null) {
+        editor.commands.insertContentAt(0, {
+          type: 'frontmatter',
+          content: frontmatter ? [{ type: 'text', text: frontmatter }] : [],
+        })
+      }
       setCurrentFilePath(filePath)
       currentFilePathRef.current = filePath
       setIsDirty(false)
@@ -358,7 +369,14 @@ export function SimpleEditor() {
 
       handleFileDrop(files, window.electronAPI, {
         setContent: (markdown) => {
-          editor.commands.setContent(markdown, { emitUpdate: false, contentType: 'markdown' })
+          const { frontmatter, body } = extractFrontmatter(markdown)
+          editor.commands.setContent(body, { emitUpdate: false, contentType: 'markdown' })
+          if (frontmatter !== null) {
+            editor.commands.insertContentAt(0, {
+              type: 'frontmatter',
+              content: frontmatter ? [{ type: 'text', text: frontmatter }] : [],
+            })
+          }
         },
         setFilePath: (path) => {
           setCurrentFilePath(path)

@@ -1,0 +1,51 @@
+.tiptap.ProseMirror {
+  .frontmatter-block {
+    --fm-bg: rgba(20, 20, 19, 0.03);
+    --fm-border: rgba(20, 20, 19, 0.08);
+    --fm-text: rgba(20, 20, 19, 0.4);
+    --fm-label: rgba(20, 20, 19, 0.25);
+
+    .dark & {
+      --fm-bg: rgba(250, 249, 245, 0.03);
+      --fm-border: rgba(250, 249, 245, 0.08);
+      --fm-text: rgba(250, 249, 245, 0.35);
+      --fm-label: rgba(250, 249, 245, 0.2);
+    }
+
+    position: relative;
+    margin-bottom: 1.5em;
+
+    .frontmatter-block__label {
+      display: block;
+      font-family: "JetBrains Mono NL", monospace;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fm-label);
+      padding: 0.5em 0.75em 0;
+      user-select: none;
+    }
+
+    pre {
+      background-color: var(--fm-bg);
+      border: 1px dashed var(--fm-border);
+      border-radius: var(--tt-radius-lg);
+      color: var(--fm-text);
+      font-family: "JetBrains Mono NL", monospace;
+      font-size: 0.8em;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0.4em 0.75em 0.6em;
+
+      code {
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+        color: inherit;
+        font-size: inherit;
+        padding: 0;
+      }
+    }
+  }
+}
