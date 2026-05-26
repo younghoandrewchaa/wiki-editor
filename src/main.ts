@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { checkForUpdate } from './update-checker';
+import { attachCloseHandler } from './window-close-handler';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -27,6 +28,10 @@ ipcMain.handle('read-file', async (_, filePath: string) => {
   return { path: filePath, content };
 });
 
+ipcMain.handle('save-file', async (_, filePath: string, content: string) => {
+  await fs.promises.writeFile(filePath, content, 'utf-8');
+});
+
 ipcMain.handle('check-for-update', () => checkForUpdate());
 
 ipcMain.handle('open-external', (_, url: string) => shell.openExternal(url));
@@ -42,6 +47,8 @@ const createWindow = (filePath?: string) => {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
+
+  attachCloseHandler(mainWindow);
 
   if (filePath) {
     mainWindow.webContents.once('did-finish-load', () => {

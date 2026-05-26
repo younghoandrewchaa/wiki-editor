@@ -12,7 +12,8 @@
     "version:bump": "npm version patch --no-git-tag-version",
     "version:commit": "git add package.json package-lock.json && git commit -m \"v$(node -p \"require('./package.json').version\")\" && git tag \"v$(node -p \"require('./package.json').version\")\"",
     "build:dmg": "sh scripts/build-dmg.sh",
-    "release": "sh scripts/release-github.sh"
+    "release": "sh scripts/release-github.sh",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": {
@@ -51,7 +52,8 @@
     "sass": "^1.100.0",
     "sass-embedded": "^1.100.0",
     "typescript": "~5.5",
-    "vite": "^5.4.21"
+    "vite": "^5.4.21",
+    "vitest": "^4.1.7"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.19",

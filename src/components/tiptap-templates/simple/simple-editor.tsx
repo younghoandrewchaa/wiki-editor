@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react"
+import { useHotkeys } from "react-hotkeys-hook"
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit"
@@ -40,6 +41,7 @@ import "@/components/tiptap-node/paragraph-node/paragraph-node.scss"
 import { HeadingDropdownMenu } from "@/components/tiptap-ui/heading-dropdown-menu"
 import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button"
 import { CopyMarkdownButton } from "@/components/tiptap-ui/copy-markdown-button"
+import { SaveButton } from "@/components/tiptap-ui/save-button"
 import { ListDropdownMenu } from "@/components/tiptap-ui/list-dropdown-menu"
 import { BlockquoteButton } from "@/components/tiptap-ui/blockquote-button"
 import { CodeBlockButton } from "@/components/tiptap-ui/code-block-button"
@@ -72,6 +74,7 @@ import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle"
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils"
+import { handleFileDrop } from "@/handle-file-drop"
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss"
@@ -81,10 +84,14 @@ const MainToolbarContent = ({
   onHighlighterClick,
   onLinkClick,
   isMobile,
+  onSave,
+  canSave,
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
   isMobile: boolean
+  onSave: () => Promise<void>
+  canSave: boolean
 }) => {
   return (
     <>
@@ -148,6 +155,7 @@ const MainToolbarContent = ({
       <ToolbarSeparator />
 
       <ToolbarGroup>
+        <SaveButton onSave={onSave} canSave={canSave} />
         <CopyMarkdownButton />
       </ToolbarGroup>
 
@@ -199,6 +207,10 @@ export function SimpleEditor() {
   )
   const toolbarRef = useRef<HTMLDivElement>(null)
   const [updateInfo, setUpdateInfo] = useState<{ version: string; downloadUrl: string } | null>(null)
+  const [currentFilePath, setCurrentFilePath] = useState<string | null>(null)
+  const [isDirty, setIsDirty] = useState(false)
+  const currentFilePathRef = useRef<string | null>(null)
+  const isDirtyRef = useRef(false)
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -248,6 +260,54 @@ export function SimpleEditor() {
     overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
   })
 
+  const handleSave = useCallback(async () => {
+    if (!editor || !currentFilePathRef.current || !window.electronAPI) return
+    const markdown = (editor as any).getMarkdown() as string
+    await window.electronAPI.saveFile(currentFilePathRef.current, markdown)
+    setIsDirty(false)
+    isDirtyRef.current = false
+    const fileName = currentFilePathRef.current.split('/').pop() ?? currentFilePathRef.current
+    document.title = fileName
+  }, [editor])
+
+  useHotkeys('mod+s', (e) => {
+    e.preventDefault()
+    handleSave()
+  }, { enableOnFormTags: true, enableOnContentEditable: true }, [handleSave])
+
+  useEffect(() => {
+    if (!editor) return
+    const onUpdate = () => {
+      if (!isDirtyRef.current) {
+        setIsDirty(true)
+        isDirtyRef.current = true
+        if (currentFilePathRef.current) {
+          const fileName = currentFilePathRef.current.split('/').pop() ?? currentFilePathRef.current
+          document.title = `● ${fileName}`
+        }
+      }
+    }
+    editor.on('update', onUpdate)
+    return () => { editor.off('update', onUpdate) }
+  }, [editor])
+
+  useEffect(() => {
+    (window as any).__hasUnsavedChanges = () => isDirtyRef.current
+    return () => { delete (window as any).__hasUnsavedChanges }
+  }, [])
+
+  useEffect(() => {
+    if (!window.electronAPI) return
+    const unsubscribe = window.electronAPI.onSaveBeforeClose(async () => {
+      if (editor && currentFilePathRef.current) {
+        const markdown = (editor as any).getMarkdown() as string
+        await window.electronAPI.saveFile(currentFilePathRef.current, markdown)
+      }
+      window.electronAPI.notifySaveComplete()
+    })
+    return unsubscribe
+  }, [editor])
+
   useEffect(() => {
     if (!isMobile && mobileView !== "main") {
       setMobileView("main")
@@ -266,6 +326,10 @@ export function SimpleEditor() {
     const unsubscribe = window.electronAPI.onFileOpened(async (filePath) => {
       const { content: markdownContent } = await window.electronAPI.readFile(filePath)
       editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
+      setCurrentFilePath(filePath)
+      currentFilePathRef.current = filePath
+      setIsDirty(false)
+      isDirtyRef.current = false
       document.title = filePath.split('/').pop() ?? filePath
       window.electronAPI.checkForUpdate().then((info) => {
         if (info) setUpdateInfo(info)
@@ -286,18 +350,20 @@ export function SimpleEditor() {
       const files = e.dataTransfer?.files
       if (!files?.length) return
 
-      const file = Array.from(files).find((f) =>
-        /\.(md|markdown)$/i.test(f.name),
-      )
-      if (!file) return
-
-      const reader = new FileReader()
-      reader.onload = () => {
-        const markdownContent = reader.result as string
-        editor.commands.setContent(markdownContent, { emitUpdate: false, contentType: 'markdown' })
-        document.title = file.name
-      }
-      reader.readAsText(file)
+      handleFileDrop(files, window.electronAPI, {
+        setContent: (markdown) => {
+          editor.commands.setContent(markdown, { emitUpdate: false, contentType: 'markdown' })
+        },
+        setFilePath: (path) => {
+          setCurrentFilePath(path)
+          currentFilePathRef.current = path
+          setIsDirty(false)
+          isDirtyRef.current = false
+        },
+        setTitle: (name) => {
+          document.title = name
+        },
+      })
     }
 
     document.addEventListener('dragover', handleDragOver)
@@ -344,6 +410,8 @@ export function SimpleEditor() {
               onHighlighterClick={() => setMobileView("highlighter")}
               onLinkClick={() => setMobileView("link")}
               isMobile={isMobile}
+              onSave={handleSave}
+              canSave={isDirty && currentFilePath !== null}
             />
           ) : (
             <MobileToolbarContent
