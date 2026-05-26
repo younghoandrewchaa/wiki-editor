@@ -4,6 +4,10 @@ A markdown editor built with Electron, React, and Tiptap.
 
 ![M Note](m-note-screenshot.png)
 
+## Download
+
+Download the latest DMG from the [GitHub Releases](https://github.com/younghoandrewchaa/m-note/releases) page.
+
 ## Development
 
 ```bash
