@@ -7,12 +7,16 @@
     --tt-table-header-bg: var(--tt-gray-dark-a-100);
   }
 
+  .tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
   table {
     border-collapse: collapse;
     width: 100%;
     margin-top: 1.5em;
     margin-bottom: 1.5em;
-    overflow: auto;
 
     &:first-child {
       margin-top: 0;
@@ -30,6 +34,8 @@
     text-align: left;
     vertical-align: top;
     min-width: 80px;
+    overflow-wrap: break-word;
+    word-break: break-word;
 
     > p {
       margin: 0;
