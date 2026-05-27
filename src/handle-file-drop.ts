@@ -1,6 +1,7 @@
 interface FileDropAPI {
   getFilePath: (file: File) => string;
   readFile: (filePath: string) => Promise<{ path: string; content: string }>;
+  setFilePath?: (filePath: string) => void | Promise<void>;
 }
 
 interface FileDropCallbacks {
@@ -26,6 +27,7 @@ export function handleFileDrop(
       callbacks.setContent(content);
       callbacks.setFilePath(filePath);
       callbacks.setTitle(file.name);
+      electronAPI.setFilePath?.(filePath);
     });
   } else {
     const reader = new FileReader();

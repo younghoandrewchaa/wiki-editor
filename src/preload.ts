@@ -32,4 +32,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getFilePath: (file: File) => {
     return webUtils.getPathForFile(file);
   },
+  setFilePath: (filePath: string): Promise<void> => {
+    return ipcRenderer.invoke('set-file-path', filePath);
+  },
 });

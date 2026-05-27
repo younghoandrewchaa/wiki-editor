@@ -78,6 +78,19 @@ describe('handleFileDrop', () => {
     expect(callbacks.setContent).not.toHaveBeenCalled();
   });
 
+  it('calls api.setFilePath with the native path after reading the file', async () => {
+    const api = {
+      getFilePath: vi.fn().mockReturnValue('/Users/test/doc.md'),
+      readFile: vi.fn().mockResolvedValue({ path: '/Users/test/doc.md', content: '# Hello' }),
+      setFilePath: vi.fn(),
+    };
+    const file = new File(['# Hello'], 'doc.md', { type: 'text/markdown' });
+
+    handleFileDrop(makeFileList(file), api, callbacks);
+
+    await vi.waitFor(() => expect(api.setFilePath).toHaveBeenCalledWith('/Users/test/doc.md'));
+  });
+
   it('falls back to FileReader when getFilePath returns empty string', async () => {
     const api = {
       getFilePath: vi.fn().mockReturnValue(''),

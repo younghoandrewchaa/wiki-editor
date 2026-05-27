@@ -12,6 +12,7 @@ if (started) {
 
 const pendingFilePaths: string[] = [];
 let appReady = false;
+const windowFilePaths = new Map<number, string>();
 
 // Must be registered before 'ready' to catch files opened at launch on macOS.
 app.on('open-file', (event, filePath) => {
@@ -36,6 +37,10 @@ ipcMain.handle('check-for-update', () => checkForUpdate());
 
 ipcMain.handle('open-external', (_, url: string) => shell.openExternal(url));
 
+ipcMain.handle('set-file-path', (event, filePath: string) => {
+  windowFilePaths.set(event.sender.id, filePath);
+});
+
 const createWindow = (filePath?: string) => {
   const { width: screenWidth, height: screenHeight } =
     screen.getPrimaryDisplay().workAreaSize;
@@ -51,10 +56,13 @@ const createWindow = (filePath?: string) => {
   attachCloseHandler(mainWindow);
 
   if (filePath) {
-    mainWindow.webContents.once('did-finish-load', () => {
-      mainWindow.webContents.send('file-opened', filePath);
-    });
+    windowFilePaths.set(mainWindow.webContents.id, filePath);
   }
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    const storedPath = windowFilePaths.get(mainWindow.webContents.id);
+    if (storedPath) mainWindow.webContents.send('file-opened', storedPath);
+  });
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
