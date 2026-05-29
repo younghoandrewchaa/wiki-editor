@@ -37,12 +37,17 @@ export async function checkForUpdate(): Promise<UpdateInfo | null> {
 
     if (!isNewer(latestVersion, currentVersion)) return null;
 
-    const dmgAsset = release.assets.find((a) => a.name.endsWith('.dmg'));
-    if (!dmgAsset) return null;
+    const platform = process.platform;
+    const asset = release.assets.find((a) => {
+      if (platform === 'darwin') return a.name.endsWith('.dmg');
+      if (platform === 'win32') return a.name.endsWith('.exe') && a.name.includes('Setup');
+      return false;
+    });
+    if (!asset) return null;
 
     return {
       version: latestVersion,
-      downloadUrl: dmgAsset.browser_download_url,
+      downloadUrl: asset.browser_download_url,
     };
   } catch {
     return null;
