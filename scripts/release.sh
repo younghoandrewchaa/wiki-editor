@@ -52,6 +52,12 @@ gh release create "$TAG" "$DMG_PATH" \
   --title "$APP_NAME $TAG" \
   --generate-notes
 
+# Prepend Windows SmartScreen note to the release body
+EXISTING_BODY=$(gh release view "$TAG" --json body -q .body)
+gh release edit "$TAG" --notes "> **Windows users:** The Windows installer is not code-signed yet. SmartScreen may show a warning — click **\"More info\"** → **\"Run anyway\"** to proceed.
+
+${EXISTING_BODY}"
+
 echo ""
 echo "Released $APP_NAME $TAG"
 echo "  DMG: $DMG_PATH"

@@ -6,7 +6,17 @@ A markdown editor built with Electron, React, and Tiptap.
 
 ## Download
 
-Download the latest DMG from the [GitHub Releases](https://github.com/younghoandrewchaa/m-note/releases) page.
+Download the latest release from the [GitHub Releases](https://github.com/younghoandrewchaa/m-note/releases) page.
+
+- **macOS** — download the `.dmg` file
+- **Windows** — download the `.exe` setup file
+
+### Windows: SmartScreen warning
+
+The Windows installer is not code-signed yet, so Windows SmartScreen may show a warning on first launch. To proceed:
+
+1. Click **"More info"**
+2. Click **"Run anyway"**
 
 ## Development
 
