@@ -53,6 +53,8 @@ const createWindow = (filePath?: string) => {
     screen.getPrimaryDisplay().workAreaSize;
 
   const mainWindow = new BrowserWindow({
+    x: 0,
+    y: 0,
     width: Math.round(screenWidth / 2),
     height: screenHeight,
     webPreferences: {
