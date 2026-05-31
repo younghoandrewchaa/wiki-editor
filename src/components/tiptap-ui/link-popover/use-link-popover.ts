@@ -13,6 +13,12 @@ import {
   isNodeTypeSelected,
   sanitizeUrl,
 } from "@/lib/tiptap-utils"
+import {
+  isLocalMarkdownLink,
+  resolveLocalMarkdownPath,
+} from "@/lib/local-markdown-link"
+
+export { isLocalMarkdownLink, resolveLocalMarkdownPath }
 
 /**
  * Configuration for the link popover functionality
@@ -28,6 +34,10 @@ export interface UseLinkPopoverConfig {
    */
   hideWhenUnavailable?: boolean
   /**
+   * Path of the currently open file, used to resolve relative local links.
+   */
+  currentFilePath?: string | null
+  /**
    * Callback function called when the link is set.
    */
   onSetLink?: () => void
@@ -41,6 +51,10 @@ export interface LinkHandlerProps {
    * The Tiptap editor instance.
    */
   editor: Editor | null
+  /**
+   * Path of the currently open file, used to resolve relative local links.
+   */
+  currentFilePath?: string | null
   /**
    * Callback function called when the link is set.
    */
@@ -106,7 +120,7 @@ export function shouldShowLinkButton(props: {
  * Custom hook for handling link operations in a Tiptap editor
  */
 export function useLinkHandler(props: LinkHandlerProps) {
-  const { editor, onSetLink } = props
+  const { editor, onSetLink, currentFilePath } = props
   const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
@@ -167,17 +181,20 @@ export function useLinkHandler(props: LinkHandlerProps) {
     setUrl("")
   }, [editor])
 
-  const openLink = useCallback(
-    (target = "_blank", features = "noopener,noreferrer") => {
-      if (!url) return
+  const openLink = useCallback(() => {
+    if (!url) return
 
-      const safeUrl = sanitizeUrl(url, window.location.href)
-      if (safeUrl !== "#") {
-        window.open(safeUrl, target, features)
-      }
-    },
-    [url]
-  )
+    if (isLocalMarkdownLink(url)) {
+      const resolvedPath = resolveLocalMarkdownPath(url, currentFilePath)
+      window.electronAPI?.openLocalFile(resolvedPath)
+      return
+    }
+
+    const safeUrl = sanitizeUrl(url, window.location.href)
+    if (safeUrl !== "#") {
+      window.electronAPI?.openExternal(safeUrl)
+    }
+  }, [url, currentFilePath])
 
   return {
     url: url || "",
@@ -271,6 +288,7 @@ export function useLinkPopover(config?: UseLinkPopoverConfig) {
   const {
     editor: providedEditor,
     hideWhenUnavailable = false,
+    currentFilePath,
     onSetLink,
   } = config || {}
 
@@ -283,6 +301,7 @@ export function useLinkPopover(config?: UseLinkPopoverConfig) {
 
   const linkHandler = useLinkHandler({
     editor,
+    currentFilePath,
     onSetLink,
   })
 

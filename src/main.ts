@@ -37,6 +37,13 @@ ipcMain.handle('check-for-update', () => checkForUpdate());
 
 ipcMain.handle('open-external', (_, url: string) => shell.openExternal(url));
 
+ipcMain.handle('open-local-file', (_, filePath: string) => {
+  if (!/\.(md|markdown)$/i.test(filePath)) return false;
+  if (!fs.existsSync(filePath)) return false;
+  createWindow(filePath);
+  return true;
+});
+
 ipcMain.handle('set-file-path', (event, filePath: string) => {
   windowFilePaths.set(event.sender.id, filePath);
 });

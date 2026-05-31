@@ -91,12 +91,14 @@ const MainToolbarContent = ({
   isMobile,
   onSave,
   canSave,
+  currentFilePath,
 }: {
   onHighlighterClick: () => void
   onLinkClick: () => void
   isMobile: boolean
   onSave: () => Promise<void>
   canSave: boolean
+  currentFilePath: string | null
 }) => {
   return (
     <>
@@ -132,7 +134,7 @@ const MainToolbarContent = ({
         ) : (
           <ColorHighlightPopoverButton onClick={onHighlighterClick} />
         )}
-        {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+        {!isMobile ? <LinkPopover currentFilePath={currentFilePath} /> : <LinkButton onClick={onLinkClick} />}
       </ToolbarGroup>
 
       <ToolbarSeparator />
@@ -178,9 +180,11 @@ const MainToolbarContent = ({
 const MobileToolbarContent = ({
   type,
   onBack,
+  currentFilePath,
 }: {
   type: "highlighter" | "link"
   onBack: () => void
+  currentFilePath: string | null
 }) => (
   <>
     <ToolbarGroup>
@@ -199,7 +203,7 @@ const MobileToolbarContent = ({
     {type === "highlighter" ? (
       <ColorHighlightPopoverContent />
     ) : (
-      <LinkContent />
+      <LinkContent currentFilePath={currentFilePath} />
     )}
   </>
 )
@@ -436,11 +440,13 @@ export function SimpleEditor() {
               isMobile={isMobile}
               onSave={handleSave}
               canSave={isDirty && currentFilePath !== null}
+              currentFilePath={currentFilePath}
             />
           ) : (
             <MobileToolbarContent
               type={mobileView === "highlighter" ? "highlighter" : "link"}
               onBack={() => setMobileView("main")}
+              currentFilePath={currentFilePath}
             />
           )}
         </Toolbar>

@@ -18,6 +18,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openExternal: (url: string): Promise<void> => {
     return ipcRenderer.invoke('open-external', url);
   },
+  openLocalFile: (filePath: string): Promise<boolean> => {
+    return ipcRenderer.invoke('open-local-file', filePath);
+  },
   saveFile: (filePath: string, content: string): Promise<void> => {
     return ipcRenderer.invoke('save-file', filePath, content);
   },

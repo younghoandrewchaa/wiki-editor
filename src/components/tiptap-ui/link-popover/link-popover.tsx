@@ -196,9 +196,11 @@ const LinkMain: React.FC<LinkMainProps> = ({
  */
 export const LinkContent: React.FC<{
   editor?: Editor | null
-}> = ({ editor }) => {
+  currentFilePath?: string | null
+}> = ({ editor, currentFilePath }) => {
   const linkPopover = useLinkPopover({
     editor,
+    currentFilePath,
   })
 
   return <LinkMain {...linkPopover} />
@@ -214,6 +216,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
     {
       editor: providedEditor,
       hideWhenUnavailable = false,
+      currentFilePath,
       onSetLink,
       onOpenChange,
       autoOpenOnLinkActive = true,
@@ -240,6 +243,7 @@ export const LinkPopover = forwardRef<HTMLButtonElement, LinkPopoverProps>(
     } = useLinkPopover({
       editor,
       hideWhenUnavailable,
+      currentFilePath,
       onSetLink,
     })
 

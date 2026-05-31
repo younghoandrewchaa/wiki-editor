@@ -3,6 +3,7 @@ interface ElectronAPI {
   readFile: (filePath: string) => Promise<{ path: string; content: string }>;
   checkForUpdate: () => Promise<{ version: string; downloadUrl: string } | null>;
   openExternal: (url: string) => Promise<void>;
+  openLocalFile: (filePath: string) => Promise<boolean>;
   saveFile: (filePath: string, content: string) => Promise<void>;
   getFilePath: (file: File) => string;
   onSaveBeforeClose: (callback: () => void) => () => void;
