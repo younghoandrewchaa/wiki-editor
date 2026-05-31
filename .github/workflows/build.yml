@@ -17,8 +17,8 @@ jobs:
         include:
           - os: macos-latest
             platform: darwin
-          - os: windows-latest
-            platform: win32
+          # - os: windows-latest
+          #   platform: win32
 
     runs-on: ${{ matrix.os }}
 
@@ -74,16 +74,16 @@ jobs:
           APPLE_TEAM_ID: ${{ matrix.platform == 'darwin' && secrets.APPLE_TEAM_ID || '' }}
         run: npx electron-forge publish
 
-      - name: Add Windows SmartScreen note to release
-        if: matrix.platform == 'win32' && github.ref_type == 'tag'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG="${GITHUB_REF_NAME}"
-          EXISTING_BODY=$(gh release view "$TAG" --json body -q .body 2>/dev/null || echo "")
-          gh release edit "$TAG" --notes "> **Windows users:** The Windows installer is not code-signed yet. SmartScreen may show a warning — click **\"More info\"** → **\"Run anyway\"** to proceed.
-
-          ${EXISTING_BODY}"
+      # - name: Add Windows SmartScreen note to release
+      #   if: matrix.platform == 'win32' && github.ref_type == 'tag'
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     TAG="${GITHUB_REF_NAME}"
+      #     EXISTING_BODY=$(gh release view "$TAG" --json body -q .body 2>/dev/null || echo "")
+      #     gh release edit "$TAG" --notes "> **Windows users:** The Windows installer is not code-signed yet. SmartScreen may show a warning — click **\"More info\"** → **\"Run anyway\"** to proceed.
+      #
+      #     ${EXISTING_BODY}"
 
       - name: Cleanup macOS keychain
         if: matrix.platform == 'darwin' && always()
